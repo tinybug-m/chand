@@ -40,7 +40,7 @@ const Card = (props: MarketInstrument) => {
         </div>
       </div>
       <div className="flex items-baseline gap-2">
-        <Typography variant="h2">{price}</Typography>
+        <Typography variant="h2">{price.toLocaleString()}</Typography>
 
         <Typography
           variant="caption"
