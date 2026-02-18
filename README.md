@@ -39,6 +39,7 @@ This project follows the **Atomic Design** methodology for components and the **
 │   │   ├── organisms/     # Complex sections (e.g., Cards grid)
 │   │   └── layout/        # Main layout wrappers
 │   └── page.# 📈 Chand - Real-time Market Dashboard
+```
 
 A high-performance financial dashboard built with **Next.js 15**, tracking real-time prices for Currencies (USD, EUR, GBP) and Precious Metals (Gold, Silver, Ayar Fund).
 
@@ -87,3 +88,4 @@ This project follows the **Atomic Design** methodology for components and the **
 │   ├── constants.ts       # Asset definitions (IDs, Slugs, Labels)
 │   └── market-service.ts  # Data fetching logic
 └── public/                # Static assets
+```
