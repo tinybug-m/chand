@@ -3,6 +3,7 @@ import Button from './components/atoms/Button';
 import Typography from './components/atoms/Typography';
 import Main from './components/layout/Main';
 import Card from './components/molecules/Card';
+import Cards from './components/organisms/Cards';
 
 export default function Home() {
   return (
@@ -31,15 +32,10 @@ export default function Home() {
             latency data synchronization.
           </Typography>
         </div>
-        <div className="flex-1"/>
+        <div className="flex-1" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        <Cards />
       </div>
     </Main>
   );
