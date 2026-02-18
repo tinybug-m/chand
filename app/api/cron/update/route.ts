@@ -1,10 +1,18 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { Redis } from '@upstash/redis';
 import { NextResponse } from 'next/server';
 import { ASSETS_TO_UPDATE } from '@/lib/constants';
 
-export async function GET() {
+const redis = Redis.fromEnv();
+
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const key = searchParams.get('key');
+
+    if (key !== process.env.CRON_SECRET) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const updatedGraphs = await Promise.all(
       ASSETS_TO_UPDATE.map(async (asset) => {
         const url = `https://api.tgju.org/v1/market/indicator/summary-table-data/${asset.slug}?start=0&length=30`;
@@ -44,15 +52,17 @@ export async function GET() {
       }),
     );
 
-    const filePath = path.join(process.cwd(), 'lib', 'db.json');
-    await fs.writeFile(
-      filePath,
-      JSON.stringify({ graphs: updatedGraphs }, null, 2),
-    );
+    // 3. THE SWAP: Save to Redis instead of fs.writeFile
+    // We store it under the key 'market_data'
+    await redis.set('market_data', updatedGraphs);
 
-    return NextResponse.json({ success: true, count: updatedGraphs.length });
+    return NextResponse.json({
+      success: true,
+      count: updatedGraphs.length,
+      timestamp: new Date().toISOString(),
+    });
   } catch (error) {
-    console.error(error);
+    console.error('Update Error:', error);
     return NextResponse.json(
       { error: 'Failed to update assets' },
       { status: 500 },
