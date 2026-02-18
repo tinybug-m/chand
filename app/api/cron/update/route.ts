@@ -9,9 +9,9 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const key = searchParams.get('key');
 
-    if (key !== process.env.CRON_SECRET) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // if (key !== process.env.CRON_SECRET) {
+    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // }
 
     const updatedGraphs = await Promise.all(
       ASSETS_TO_UPDATE.map(async (asset) => {
