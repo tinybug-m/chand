@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📈 Chand - Real-time Market Dashboard
 
-## Getting Started
+A high-performance financial dashboard built with **Next.js 15**, tracking real-time prices for Currencies (USD, EUR, GBP) and Precious Metals (Gold, Silver, Ayar Fund).
 
-First, run the development server:
+The app features a **serverless architecture** that automatically synchronizes data every 10 minutes using a secure cron-logic and cloud-based Redis storage to ensure zero-latency data delivery.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Project Status](https://img.shields.io/badge/status-live-success)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Real-time Asset Tracking**: Live conversion from Rial to Toman for major global currencies.
+- **Commodity Insights**: Daily tracking for Gold 18k, Silver 999, and the Ayar Gold Fund.
+- **Interactive Charts**: Visual 30-day historical trends for every asset.
+- **Serverless Cron Jobs**: Automated data fetching via a secure API route (`/api/cron/update`).
+- **Cloud Caching**: Uses **Upstash Redis** to cache market data, preventing API rate limits and ensuring instant page loads.
+- **Atomic Design**: Built using a scalable Atomic Design file structure (Atoms, Molecules, Organisms).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Tech Stack
 
-## Learn More
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Database**: [Upstash Redis](https://upstash.com/) (Serverless Key-Value Store)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Data Source**: TGJU Market Indicators
+- **Deployment**: [Vercel](https://vercel.com/)
 
-To learn more about Next.js, take a look at the following resources:
+## 🏗 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project follows the **Atomic Design** methodology for components and the **App Router** for routing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+├── app/
+│   ├── api/
+│   │   ├── cron/update/   # The "Saver": Fetches external API data & saves to Redis
+│   │   └── graph/         # The "Reader": Fetches cached data from Redis for the UI
+│   ├── components/
+│   │   ├── atoms/         # Buttons, badges, typography
+│   │   ├── molecules/     # Cards, graphs
+│   │   ├── organisms/     # Complex sections (e.g., Cards grid)
+│   │   └── layout/        # Main layout wrappers
+│   └── page.# 📈 Chand - Real-time Market Dashboard
 
-## Deploy on Vercel
+A high-performance financial dashboard built with **Next.js 15**, tracking real-time prices for Currencies (USD, EUR, GBP) and Precious Metals (Gold, Silver, Ayar Fund).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The app features a **serverless architecture** that automatically synchronizes data every 10 minutes using a secure cron-logic and cloud-based Redis storage to ensure zero-latency data delivery.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+![Project Status](https://img.shields.io/badge/status-live-success)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
+## 🚀 Features
+
+- **Real-time Asset Tracking**: Live conversion from Rial to Toman for major global currencies.
+- **Commodity Insights**: Daily tracking for Gold 18k, Silver 999, and the Ayar Gold Fund.
+- **Interactive Charts**: Visual 30-day historical trends for every asset.
+- **Serverless Cron Jobs**: Automated data fetching via a secure API route (`/api/cron/update`).
+- **Cloud Caching**: Uses **Upstash Redis** to cache market data, preventing API rate limits and ensuring instant page loads.
+- **Atomic Design**: Built using a scalable Atomic Design file structure (Atoms, Molecules, Organisms).
+
+## 🛠 Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Database**: [Upstash Redis](https://upstash.com/) (Serverless Key-Value Store)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Data Source**: TGJU Market Indicators
+- **Deployment**: [Vercel](https://vercel.com/)
+
+## 🏗 Project Structure
+
+This project follows the **Atomic Design** methodology for components and the **App Router** for routing.
+
+```text
+├── app/
+│   ├── api/
+│   │   ├── cron/update/   # The "Saver": Fetches external API data & saves to Redis
+│   │   └── graph/         # The "Reader": Fetches cached data from Redis for the UI
+│   ├── components/
+│   │   ├── atoms/         # Buttons, badges, typography
+│   │   ├── molecules/     # Cards, graphs
+│   │   ├── organisms/     # Complex sections (e.g., Cards grid)
+│   │   └── layout/        # Main layout wrappers
+│   └── page.tsx           # Dashboard Entry Point
+├── lib/
+│   ├── constants.ts       # Asset definitions (IDs, Slugs, Labels)
+│   └── market-service.ts  # Data fetching logic
+└── public/                # Static assetstsx           # Dashboard Entry Point
+├── lib/
+│   ├── constants.ts       # Asset definitions (IDs, Slugs, Labels)
+│   └── market-service.ts  # Data fetching logic
+└── public/                # Static assets
