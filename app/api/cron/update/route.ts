@@ -19,7 +19,7 @@ export async function GET(req: Request) {
         const res = await fetch(url, { cache: 'no-store' });
         const result = await res.json();
 
-        const latestRow = result.data[0];
+        const latestRow = result.data[3];
 
         const priceInToman = Math.floor(
           parseInt(latestRow[0].replace(/,/g, '')) / 10,
