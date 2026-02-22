@@ -5,19 +5,26 @@ import { ASSETS_TO_UPDATE } from '@/lib/constants';
 const redis = Redis.fromEnv();
 
 export async function GET(req: Request) {
+  // console.log('Starting Redis Sync...');
+
   try {
-    const { searchParams } = new URL(req.url);
-    const key = searchParams.get('key');
+    const updatedGraphs = [];
 
-    // if (key !== process.env.CRON_SECRET) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
-    const updatedGraphs = await Promise.all(
-      ASSETS_TO_UPDATE.map(async (asset) => {
+    for (const asset of ASSETS_TO_UPDATE) {
+      try {
         const url = `https://api.tgju.org/v1/market/indicator/summary-table-data/${asset.slug}?start=0&length=30`;
-        const res = await fetch(url, { cache: 'no-store' });
+
+        console.log(`📡 Fetching ${asset.name}...`);
+
+        const res = await fetch(url, {
+          cache: 'no-store',
+          signal: AbortSignal.timeout(10000),
+        });
+
+        if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
+
         const result = await res.json();
+        if (!result.data || result.data.length === 0) continue;
 
         const latestRow = result.data[0];
 
@@ -36,7 +43,7 @@ export async function GET(req: Request) {
           }))
           .reverse();
 
-        return {
+        updatedGraphs.push({
           id: asset.id,
           name: asset.name,
           type:
@@ -48,23 +55,28 @@ export async function GET(req: Request) {
           price: priceInToman,
           change: dailyChange,
           data: history,
-        };
-      }),
-    );
+        });
 
-    // 3. THE SWAP: Save to Redis instead of fs.writeFile
-    // We store it under the key 'market_data'
-    await redis.set('market_data', updatedGraphs);
+        // console.log(`✅ Processed ${asset.name}`);
+      } catch (assetError: any) {
+        console.error(`❌ Failed asset ${asset.slug}:`, assetError.message);
+      }
+    }
+
+    if (updatedGraphs.length > 0) {
+      await redis.set('market_data', updatedGraphs);
+      console.log(`💾 Saved ${updatedGraphs.length} assets to Redis.`);
+    }
 
     return NextResponse.json({
       success: true,
       count: updatedGraphs.length,
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
-    console.error('Update Error:', error);
+  } catch (error: any) {
+    console.error('Global Update Error:', error);
     return NextResponse.json(
-      { error: 'Failed to update assets' },
+      { error: 'Failed to update assets', details: error.message },
       { status: 500 },
     );
   }
