@@ -26,7 +26,7 @@ export async function GET(req: Request) {
         const result = await res.json();
         if (!result.data || result.data.length === 0) continue;
 
-        const latestRow = result.data[3];
+        const latestRow = result.data[0];
 
         const priceInToman = Math.floor(
           parseInt(latestRow[0].replace(/,/g, '')) / 10,
@@ -57,7 +57,7 @@ export async function GET(req: Request) {
           data: history,
         });
 
-        // console.log(`✅ Processed ${asset.name}`);
+        console.log(`✅ Processed ${asset.name}`);
       } catch (assetError: any) {
         console.error(`❌ Failed asset ${asset.slug}:`, assetError.message);
       }
